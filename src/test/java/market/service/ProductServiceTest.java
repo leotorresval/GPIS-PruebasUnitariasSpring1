@@ -4,6 +4,8 @@ import market.model.Product;
 import market.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
@@ -41,14 +43,29 @@ class ProductServiceTest {
 
     @Test
     void updateProduct() {
+        Product p = new Product();
+        p.setId(10);
+        p.setName("Test Update");
+        when(productRepository.save(Mockito.any())).thenReturn(p);
+        Product respuesta = productService.updateProduct(p);
+        assertEquals(p.getId(),respuesta.getId());
+        assertNotNull(respuesta);
+        verify(productRepository).save(p);
+
     }
 
     @Test
     void deleteProduct() {
+        doNothing().when(productRepository).delete(ArgumentMatchers.any());
+        productService.deleteProduct(ArgumentMatchers.any());
+        verify(productRepository,times(1)).delete(ArgumentMatchers.any());
     }
 
     @Test
     void deleteProductById() {
+        doNothing().when(productRepository).deleteById(1L);
+        productService.deleteProductById(1L);
+        verify(productRepository).deleteById(1L);
     }
 
     @Test
