@@ -22,7 +22,7 @@ public class ProductRest {
         Product product = productService.saveProduct(p);
         try {
             return ResponseEntity.created(new URI("/product/"+product.getId())).body(product);
-        } catch (URISyntaxException e) {
+        } catch (RuntimeException | URISyntaxException e) {
             return ResponseEntity.badRequest().build();
         }
     }
